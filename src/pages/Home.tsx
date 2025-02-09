@@ -2,15 +2,7 @@
 import '../home.css'
 import { Container } from "react-bootstrap"
 
-interface UserInfo {
-    name: string;
-}
-
-interface HomeProps {
-    userInfo: UserInfo;
-}
-
-export default function Home({ userInfo }: HomeProps) {
+export default function Home({ userInfo }: { userInfo: any }) {
     return (
         <Container fluid>
             {

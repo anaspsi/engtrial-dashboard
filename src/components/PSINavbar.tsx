@@ -12,7 +12,7 @@ export default function PSINavbar() {
     };
 
     return (
-        <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="dark" >
+        <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="blue" >
             <Container fluid>
                 <Navbar.Brand href="#home">ENGTRIAL Insight</Navbar.Brand>
                 <button onClick={handleNavCollapse} className={`navbar-toggler ${isNavCollapsed ? '' : 'collapsed'}`} type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter basename='engtrial'>
+    <BrowserRouter basename='engtrial/insight'>
       <App />
     </BrowserRouter>
   </StrictMode>,

@@ -9,7 +9,7 @@ import About from "./pages/About"
 
 export default function App() {
 
-  const [userInfo, setUserInfo] = useState({ name: 'Hi guest' })
+  const [userInfo] = useState({ name: 'Hi guest' })
 
   return (
     <div>

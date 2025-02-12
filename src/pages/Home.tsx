@@ -99,6 +99,7 @@ export default function Home({ userInfo }: { userInfo: any }) {
                         <table className="table align-middle table-sm table-bordered table-hover" >
                             <thead className="text-center table-light">
                                 <tr className="first">
+                                    <th className="align-middle">Date</th>
                                     <th className="align-middle">Line</th>
                                     <th className="align-middle">Machine Number</th>
                                     <th className="align-middle">Check</th>
@@ -110,6 +111,7 @@ export default function Home({ userInfo }: { userInfo: any }) {
                                 {
                                     isSearching ? <tr><td colSpan={16}>Please wait</td></tr> : rowData.data.map((item: any, index) => {
                                         return <tr key={index} className="font-monospace">
+                                            <td>{item.txttgl}</td>
                                             <td>{item.txtline}</td>
                                             <td>{item.txtict}</td>
                                             <td>{numeral(item.txtcheck).format(',')}</td>

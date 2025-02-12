@@ -46,6 +46,19 @@ export default function Home({ userInfo }: { userInfo: any }) {
 
 
     useEffect(() => {
+        // atur freeze first row
+        let aTable = document.getElementById('mainTable')
+        let aStack1 = document.getElementById('stack1')
+        let aStack8 = document.getElementById('stack8')
+        if (aTable && aStack1 && aStack8) {
+            aTable.style.cssText = `height: ${window.innerHeight
+                - aStack1.offsetHeight
+                - aStack8.offsetHeight
+                - 130
+                }px`
+        }
+
+        // atur cache
         if (searchParam.get('machineBrand') ?? '' != '') {
             localStorage.setItem('ed_machine', searchParam.get('machineBrand') ?? '')
             setTheMachine(localStorage.getItem('ed_machine') ?? '')
@@ -95,7 +108,7 @@ export default function Home({ userInfo }: { userInfo: any }) {
 
             <div className="row">
                 <div className="col-md-12 mb-1">
-                    <div className="table-responsive" id="coba">
+                    <div className="table-responsive" id="mainTable">
                         <table className="table align-middle table-sm table-bordered table-hover" >
                             <thead className="text-center table-light">
                                 <tr className="first">

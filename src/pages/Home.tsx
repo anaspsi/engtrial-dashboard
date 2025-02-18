@@ -185,6 +185,8 @@ export default function Home({ userInfo }: { userInfo: any }) {
                                                         <th className="align-middle">Date</th>
                                                         <th className="align-middle">Line</th>
                                                         <th className="align-middle">Machine Number</th>
+                                                        <th className="align-middle">Jig Number</th>
+                                                        <th className="align-middle">Model</th>
                                                         <th className="align-middle">Check</th>
                                                         <th className="align-middle">Pass</th>
                                                         <th className="align-middle">Pass Rate</th>
@@ -197,6 +199,8 @@ export default function Home({ userInfo }: { userInfo: any }) {
                                                                 <td>{item.txttgl}</td>
                                                                 <td>{item.txtline}</td>
                                                                 <td>{item.txtict}</td>
+                                                                <td>{item.txtjig}</td>
+                                                                <td>{item.txtmodel}</td>
                                                                 <td>{numeral(item.txtcheck).format(',')}</td>
                                                                 <td>{numeral(item.txtpass).format(',')}</td>
                                                                 <td><ProgressBar now={item.txtpercen} label={`${item.txtpercen}%`} /></td>

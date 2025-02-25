@@ -6,6 +6,7 @@ import axios from "axios"
 import { useSearchParams } from 'react-router'
 import numeral from 'numeral'
 
+
 export default function Home({ userInfo }: { userInfo: any }) {
     console.log(userInfo)
     const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ export default function Home({ userInfo }: { userInfo: any }) {
     })
 
     const [isSearching, setIsSearching] = useState(false)
+    const [isExporting, setIsExporting] = useState(false)
     const [isSearchingD1, setIsSearchingD1] = useState(false)
     const [theMachine, setTheMachine] = useState('')
     const [lineCode, setLineCode] = useState('')
@@ -99,6 +101,37 @@ export default function Home({ userInfo }: { userInfo: any }) {
             })
     }
 
+    const saveBlob = (function () {
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.setAttribute('style', "display: none");
+        return function (blob: any, fileName: any) {
+            var url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+    }());
+
+    function handleClickExport() {
+        const params = new URLSearchParams(formData).toString()
+        setIsExporting(true)
+        if (confirm('Are you sure want to export the data ?')) {
+            axios({
+                url: import.meta.env.VITE_APP_ENDPOINT + '/engtrial/report1-to-spreadsheet?' + params + '&machineBrand=' + theMachine,
+                method: 'GET',
+                responseType: 'blob',               
+            }).then(response => {
+                setIsExporting(false)
+                saveBlob(response.data, `Rating Logs from ${formData.dateFrom} to ${formData.dateTo} .xlsx`)
+            }).catch(error => {
+                console.log(error)
+                setIsExporting(false)
+            })
+        }
+    }
+
     return (
         <Container fluid>
             <form>
@@ -116,6 +149,7 @@ export default function Home({ userInfo }: { userInfo: any }) {
                             <span className="input-group-text" >To</span>
                             <input type="date" className="form-control" name="dateTo" onChange={handleChange} ref={refInputDate2} />
                             <button type="button" className="btn btn-primary" disabled={isSearching} onClick={handleClickSearch}>Search</button>
+                            <button type="button" className="btn btn-success" disabled={isExporting} onClick={handleClickExport}>Export</button>
                         </div>
                     </div>
                 </div>

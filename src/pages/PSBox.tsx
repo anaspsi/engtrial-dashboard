@@ -3,11 +3,11 @@ import { useEffect, useRef, useState } from 'react'
 import '../home.css'
 import { Badge, Card, Container, ProgressBar } from "react-bootstrap"
 import axios from "axios"
-import { useNavigate, useSearchParams } from 'react-router'
+import { useSearchParams } from 'react-router'
 import numeral from 'numeral'
 
 
-export default function Home({ userInfo }: { userInfo: any }) {
+export default function PSBox({ userInfo }: { userInfo: any }) {
     console.log(userInfo)
     const [formData, setFormData] = useState({
         dateFrom: "",
@@ -23,7 +23,6 @@ export default function Home({ userInfo }: { userInfo: any }) {
 
     const refInputDate1 = useRef(null)
     const refInputDate2 = useRef(null)
-    let navigate = useNavigate()
 
 
     function handleChange(e: any) {
@@ -40,7 +39,7 @@ export default function Home({ userInfo }: { userInfo: any }) {
         setRowDataDetail1({
             data: []
         })
-        axios.get(import.meta.env.VITE_APP_ENDPOINT + '/engtrial/report1?' + params + '&machineBrand=' + theMachine)
+        axios.get(import.meta.env.VITE_APP_ENDPOINT + '/engtrial/report2?' + params + '&customer=' + theMachine)
             .then((response) => {
                 const datanya = response.data.data
                 setRowData({
@@ -71,8 +70,8 @@ export default function Home({ userInfo }: { userInfo: any }) {
         }
 
         // atur cache
-        if (searchParam.get('machineBrand') ?? '' != '') {
-            localStorage.setItem('ed_machine', searchParam.get('machineBrand') ?? '')
+        if (searchParam.get('customer') ?? '' != '') {
+            localStorage.setItem('ed_machine', searchParam.get('customer') ?? '')
             setTheMachine(localStorage.getItem('ed_machine') ?? '')
         } else {
             // kalau ga ada param pakai dari nilai valid terakhir
@@ -81,27 +80,15 @@ export default function Home({ userInfo }: { userInfo: any }) {
             }
         }
 
-        if (searchParam.get('pageh') ?? '' != '') {
-            if (searchParam.get('customer') ?? '' != '') {
-                localStorage.setItem('ed_machine', searchParam.get('customer') ?? '')
-                setTheMachine(localStorage.getItem('ed_machine') ?? '')
-            } else {
-                // kalau ga ada param pakai dari nilai valid terakhir
-                if (localStorage.getItem('ed_machine')) {
-                    setTheMachine(localStorage.getItem('ed_machine') ?? '')
-                }
-            }
-            navigate('/dashboard/psbox-page')
-        }
     }, [])
 
     function handleClickMainView(data: any) {
         setLineCode(data.line)
         const params = new URLSearchParams(formData).toString()
         setIsSearchingD1(true)
-        axios.get(import.meta.env.VITE_APP_ENDPOINT + '/engtrial/reportd1?' + params + '&machineBrand=' + theMachine
+        axios.get(import.meta.env.VITE_APP_ENDPOINT + '/engtrial/reportd2?' + params + '&customer=' + theMachine
             + '&lineCode=' + data.line
-            + '&machineCode=' + data.machineCode)
+            + '&ps=' + data.ps)
             .then((response) => {
                 setIsSearchingD1(false)
                 const datanya = response.data.data
@@ -133,12 +120,12 @@ export default function Home({ userInfo }: { userInfo: any }) {
         setIsExporting(true)
         if (confirm('Are you sure want to export the data ?')) {
             axios({
-                url: import.meta.env.VITE_APP_ENDPOINT + '/engtrial/report1-to-spreadsheet?' + params + '&machineBrand=' + theMachine,
+                url: import.meta.env.VITE_APP_ENDPOINT + '/engtrial/report2-to-spreadsheet?' + params + '&customer=' + theMachine,
                 method: 'GET',
                 responseType: 'blob',
             }).then(response => {
                 setIsExporting(false)
-                saveBlob(response.data, `Rating Logs from ${formData.dateFrom} to ${formData.dateTo} .xlsx`)
+                saveBlob(response.data, `PS Rating Logs from ${formData.dateFrom} to ${formData.dateTo} .xlsx`)
             }).catch(error => {
                 console.log(error)
                 setIsExporting(false)
@@ -152,7 +139,7 @@ export default function Home({ userInfo }: { userInfo: any }) {
                 <div className="row mt-3" id="stack1">
                     <div className="col-md-6">
                         <div className="input-group input-group-sm mb-1">
-                            <span className="input-group-text" >Machine</span>
+                            <span className="input-group-text" >Customer</span>
                             <input type="text" className="form-control" value={theMachine ?? ''} readOnly disabled />
                         </div>
                     </div>
@@ -197,8 +184,8 @@ export default function Home({ userInfo }: { userInfo: any }) {
                                                     {
                                                         isSearching ? <tr><td colSpan={16}>Please wait</td></tr> : rowData.data.map((item: any, index) => {
                                                             return <tr key={index} className="font-monospace">
-                                                                <td onClick={() => handleClickMainView({ line: item.txtline, machineCode: item.txtict })} title='See detail' style={{ cursor: 'pointer' }}>{item.txtline}</td>
-                                                                <td>{item.txtict}</td>
+                                                                <td onClick={() => handleClickMainView({ line: item.txtline, ps: item.txtps })} title='See detail' style={{ cursor: 'pointer' }}>{item.txtline}</td>
+                                                                <td>{item.txtps}</td>
                                                                 <td>{numeral(item.txtcheck).format(',')}</td>
                                                                 <td>{numeral(item.txtpass).format(',')}</td>
                                                                 <td><ProgressBar now={item.txtpercen} label={`${item.txtpercen}%`} /></td>
@@ -246,7 +233,7 @@ export default function Home({ userInfo }: { userInfo: any }) {
                                                             return <tr key={index} className="font-monospace">
                                                                 <td>{item.txttgl}</td>
                                                                 <td>{item.txtline}</td>
-                                                                <td>{item.txtict}</td>
+                                                                <td>{item.txtps}</td>
                                                                 <td>{item.txtjig}</td>
                                                                 <td>{item.txtmodel}</td>
                                                                 <td>{numeral(item.txtcheck).format(',')}</td>

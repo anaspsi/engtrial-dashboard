@@ -6,6 +6,7 @@ import { useState } from "react"
 
 import Home from "./pages/Home"
 import About from "./pages/About"
+import PSBox from "./pages/PSBox"
 
 export default function App() {
 
@@ -21,6 +22,7 @@ export default function App() {
           <Route index element={<Home userInfo={userInfo} />} />
 
           <Route path="about" element={<About />} />
+          <Route path="psbox-page" element={<PSBox userInfo={userInfo} />} />
           <Route path="*" element={<Dashboard userInfo={userInfo} />} />
         </Route>
         <Route>
